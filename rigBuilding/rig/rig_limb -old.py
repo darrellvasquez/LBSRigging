@@ -1,12 +1,13 @@
 import maya.cmds as cmds
+import json
 
-#Create arm joints
-#Create IK joints
-IKjointInfo = [['IK_upArm_JNT', [0, 0, 0]], ['IK_loArm_JNT', [-1, 0, -3]], ['IK_wristArm_JNT', [0, 0, -6]], ['IK_wristArmEnd_JNT', [0, 0, -8]]]
-#Create FK joints
-FKjointInfo = [['FK_upArm_JNT', [0, 0, 0]], ['FK_loArm_JNT', [-1, 0, -3]], ['FK_wristArm_JNT', [0, 0, -6]], ['FK_wristArmEnd_JNT', [0, 0, -8]]]
-#Create rig joints    
-RIGjointInfo = [['RIG_upArm_JNT', [0, 0, 0]], ['RIG_loArm_JNT', [-1, 0, -3]], ['RIG_wristArm_JNT', [0, 0, -6]], ['RIG_wristArmEnd_JNT', [0, 0, -8]]]
+info = json.loads(newdata)
+
+#This iterats through the dictionary of newdata lists
+for key, value in info.iteritems ():
+    print key
+    print value
+
 
 
 class Rig_Limb:
@@ -49,6 +50,7 @@ class Rig_Limb:
 		cmds.parent(FKctrlInfo[1][2], FKctrlInfo[0][1])
 		cmds.parent(FKctrlInfo[2][2], FKctrlInfo[1][1])
 
+
     
 	def createJoint(self, jointInfo):
 	    for item in jointInfo:
@@ -57,26 +59,26 @@ class Rig_Limb:
 
 	def createControl(self, ctrlInfo):
 		for info in ctrlInfo:
-	    		#Create IK Control
-	    		#get world space position of wrist
-	    		pos = info[0]
-	    		#Create empty group
-	    		ctrlGrp = cmds.group(em=True, name=info[2])
-	    		#Create circle control object
-	    		ctrl = cmds.circle(n=info[1], nr=(0, 0, 1), c=(0, 0, 0))
-	    		#parent control to group
-	    		cmds.parent(ctrl, ctrlGrp)
-	    		#move group to joint
-	    		cmds.xform(ctrlGrp, t=pos, ws=True)
+	    	#Create IK/FK Controls
+	    	#get world space position of wrist
+	   		pos = info[0]
+	   		#Create empty group
+	   		ctrlGrp = cmds.group(em=True, name=info[2] )
+	   		#Create circle control object
+    		ctrl = cmds.circle(n=info[1], nr=(0, 0, 1), c=(0, 0, 0) )
+	    	#parent control to group
+	    	cmds.parent(ctrl, ctrlGrp)
+	    	#move group to joint
+	    	cmds.xform(ctrlGrp, t=pos, ws=True)
 
 	def calculatePVposition(self, jnts):
 		from maya import cmds , OpenMaya
 		start = cmds.xform(jnts[0], q=True, ws=True, t=True)
 		mid = cmds.xform(jnts[1], q=True, ws=True, t=True)
 		end = cmds.xform(jnts[2], q=True, ws=True, t=True)
-		startV = openMaya.MVector(start[0] ,start[1],start[2])
-		midV = openMaya.MVector(mid[0] ,mid[1],mid[2])
-		endV = openMaya.MVector(end[0] ,end[1],end[2])
+		startV = OpenMaya.MVector(start[0] ,start[1],start[2])
+		midV = OpenMaya.MVector(mid[0] ,mid[1],mid[2])
+		endV = OpenMaya.MVector(end[0] ,end[1],end[2])
 		startEnd = endV - startV
 		startMid = midV - startV
 		dotP = startMid * startEnd
