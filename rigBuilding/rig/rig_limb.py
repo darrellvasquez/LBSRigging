@@ -13,8 +13,8 @@ class Rig_Limb:
 		data = utils.readJson(data_path)
 		#Load the json into a dictionary
 		self.module_info = json.loads(data)
-        """ NOTE: If we wanted to build our arm from some set of joints
-        in the scene, we could overwrite self.module_info['positions']"""
+		""" NOTE: If we wanted to build our arm from some set of joints
+		in the scene, we could overwrite self.module_info['positions']"""
 
 
 	def rig_limb(self):
@@ -60,25 +60,25 @@ class Rig_Limb:
     
 	def createJoint(self, jointInfo):
 	    for i in range(len(jointInfo)):
-	        cmds.joint(n=jointInfo[i], p=self.module_info['position'][i])
-	        
+			cmds.joint(n=jointInfo[i], p=self.module_info['position'][i])
+
 
 	def createControl(self, ctrlInfo):
 		control_info = []
 		for info in ctrlInfo:
-	    	#Create IK/FK Controls
-	    	#get world space position of wrist
-	   		pos = info[0]
-	   		#Create empty group
-	   		ctrlGRP = cmds.group(em=True, name=info[1] + "_GRP" )
-	   		#Create circle control object
-    		ctrl = cmds.circle(n=info[1], nr=(0, 0, 1), c=(0, 0, 0) )
-	    	#parent control to group
-	    	cmds.parent(ctrl, ctrlGRP)
-	    	#move group to joint
-	    	cmds.xform(ctrlGRP, t=pos, ws=True)
-	    	control_info.append([ctrlGRP, ctrl])
-	    	return(control_info)
+			#Create IK/FK Controls
+			#get world space position of wrist
+			pos = info[0]
+			#Create empty group
+			ctrlGRP = cmds.group(em=True, name=info[1] + "_GRP" )
+			#Create circle control object
+			ctrl = cmds.circle(n=info[1], nr=(0, 0, 1), c=(0, 0, 0) )
+			#parent control to group
+			cmds.parent(ctrl, ctrlGRP)
+			#move group to joint
+			cmds.xform(ctrlGRP, t=pos, ws=True)
+			control_info.append([ctrlGRP, ctrl])
+			return(control_info)
 
 	def calculatePVposition(self, jnts):
 		from maya import cmds , OpenMaya
