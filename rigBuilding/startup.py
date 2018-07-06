@@ -5,7 +5,7 @@ import sys
 print "Startup"
 
 #Set a system path for data files.
-os.environ["LBS_DATA"] = 'D:/Dropbox/lb_tools/LBS_Rigging/rigBuilding/data/'
+os.environ["LBS_DATA"] = 'D:/Dropbox/lb_tools/LBS_Rigging/rigBuilding/'
 
 import myui.myui as ui
 #still need to figure out what this is
